@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, NotFoundException, HttpCode, Query } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { CreateSongDto } from './dto/create-song.dto';
 import { UpdateSongDto } from './dto/update-song.dto';
@@ -12,10 +12,22 @@ export class SongsController {
   async findFree(){
     return await this.songsService.findFree();
   }
+  
+  @Get('popularArtists')
+  async getPopularArtists() {
+    return await this.songsService.findPopularArtsts();
+  
+  }
 
   @Get("top")
-  findTop(){
-    return this.songsService.findTop();
+  findTop(@Query ('limit') limit){
+    console.log(!limit) 
+    if(!limit) {
+      return this.songsService.findTop(10);
+    }
+    else{
+      return this.songsService.findTop(limit)
+    }
   }
 
   @Post()
@@ -47,6 +59,6 @@ export class SongsController {
     if(!success) throw new NotFoundException("Nem talalhato a konyv");
   }
 
-  
+
   }
 

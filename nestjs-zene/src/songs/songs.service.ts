@@ -70,12 +70,22 @@ export class SongsService {
     })
   }
 
-  async findTop(){
+  async findTop(countN:number){
+    
     return prisma.songs.findMany({
       orderBy:{
         ertekeles:"desc"
       },
-      take:10
+      take:+countN
+    })
+  }
+
+  async findPopularArtsts(){
+    return prisma.songs.groupBy({
+      by: ['szerzo'],
+      _count:{
+        _all:true
+      }
     })
   }
 }
